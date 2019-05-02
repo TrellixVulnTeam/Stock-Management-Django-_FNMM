@@ -1,0 +1,151 @@
+{% include 'partials/header.html' %}
+{% load static %}
+<header class="main-header">
+    <!-- Logo -->
+    <a href="{% url 'software' %}" class="logo">
+        <img style="max-width: 85%" src="{% static 'images/flat-logo.png' %}" alt="logo">
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                {% if request.session.team == 'Admin' %}
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            {% if notifications.count > 0 %}
+                                <span class="label label-warning">{{ notifications.count }}</span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if notifications.count > 0 %}
+                                <li class="header">You have {{ notifications.count }} notifications</li>
+                            {% else %}
+                                <li class="header">You don't have any notifications</li>
+                            {% endif %}
+
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    {% for notification in notifications %}
+                                        <li>
+                                            <a href="/changes/{{ notification.id }}">
+                                                <i class="fa fa-user text-aqua"></i> {{ notification.changerID.team_member_name }}
+                                                Changed the quantity of
+                                                {{ notification.changedID.product_name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="{% url 'history' %}">View all</a></li>
+                        </ul>
+                    </li>
+                    <!-- Tasks: style can be found in dropdown.less -->
+                {% endif %}
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="hidden-xs">{{ request.session.name }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-header" style="height: 70px;">
+                            <p>
+                                {% if request.session.team == "All" %}
+                                    {{ request.session.name }} - Atrai Group
+                                {% else %}
+                                    {{ request.session.name }} - {{ request.session.team }}
+                                {% endif %}
+
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <div class="pull-right">
+                                <a href="#" data-toggle="modal" data-target="#payment_modal"
+                                   class="btn btn-default btn-flat">Log out</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li id="product_list"><a href="{% url 'product_list' %}"><i class="fa fa-tags"></i>
+                <span>Products</span></a></li>
+            {% if request.session.team == 'Admin' %}
+                <li id="team_list"><a href="{% url 'team_list' %}"><i class="fa fa-users"></i>
+                    <span>Members</span></a>
+                </li>
+                <li id="supplier_team_list"><a href="{% url 'supplier_team_list' %}"><i class="fa fa-sitemap"></i>
+                    <span>Suppliers</span></a>
+                </li>
+                <li id="add_member"><a href="{% url 'add_member' %}"><i class="fa fa-user"></i>
+                    <span>Add Member</span></a>
+                </li>
+                <li id="add_supplier"><a href="{% url 'add_supplier' %}"><i class="fa fa-truck"></i>
+                    <span>Add Supplier</span></a>
+                </li>
+                <li id="add_product"><a href="{% url 'products' %}"><i class="fa fa-tag"></i>
+                    <span>Add Product</span></a>
+                </li>
+                <li id="history"><a href="{% url 'history' %}"><i class="fa fa-history"></i>
+                    <span>History</span></a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+{% if page == "product_list" %}
+    {% include 'partials/product_list.html' %}
+{% elif page == "add_product" %}
+    {% include 'partials/add_product.html' %}
+{% elif page == "team_list" %}
+    {% include 'partials/team_list.html' %}
+{% elif page == "supplier_team_list" %}
+    {% include 'partials/supplier_team_list.html' %}
+{% elif page == "member_list" %}
+    {% include 'partials/member_list.html' %}
+{% elif page == "supplier_list" %}
+    {% include 'partials/supplier_list.html' %}
+{% elif page == "edit_product" %}
+    {% include 'partials/edit_product.html' %}
+{% elif page == "purchase_product" %}
+    {% include 'partials/purchase_product.html' %}
+{% elif page == "edit_member" %}
+    {% include 'partials/edit_member.html' %}
+{% elif page == "edit_supplier" %}
+    {% include 'partials/edit_supplier.html' %}
+{% elif page == "pay_supplier" %}
+    {% include 'partials/pay_supplier.html' %}
+{% elif page == "add_member" %}
+    {% include 'partials/add_member.html' %}
+{% elif page == "add_supplier" %}
+    {% include 'partials/add_supplier.html' %}
+{% elif page == "history" %}
+    {% include 'partials/history.html' %}
+{% elif page == "changes" %}
+    {% include 'partials/changes.html' %}
+{% else %}
+    {% url 'logout_success' %}
+{% endif %}
+
+<script>
+    $(document).on('click', '#team_list', function () {
+        document.getElementById("team_list").classList.add('active');
+    });
+</script>
+
+{% include 'partials/footer.html' %}

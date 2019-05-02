@@ -1,0 +1,21 @@
+.table-row {
+    text-align: center;
+}
+
+
+.right-table-row {
+    float: right;
+}
+
+.ash-back {
+    background: #333;
+}
+
+.error-text {
+    color: red;
+}
+
+.table-striped .clickable-row:hover {
+    background-color: #0d6aad;
+}
+

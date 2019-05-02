@@ -1,0 +1,64 @@
+<style>
+    #middle-time {
+        text-align: center;
+    }
+</style>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">History</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <table class="table table-striped">
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Changes</th>
+                            <th id="middle-time" style="width: 25%">Timestamp</th>
+                        </tr>
+                        {% for notification in all_notifications %}
+                            <tr class="clickable-row" onclick="window.location='/changes/{{ notification.id }}';"
+                                style="cursor:pointer;">
+
+                                {% if notification.valueProgress == 0 %}
+                                    <td>{{ forloop.counter }}.</td>
+                                    <td>{{ notification.changerID.team_member_name }}
+                                        added {{ notification.changeValue }} {{ notification.changedID.unit_name }}
+                                        {{ notification.changedID.product_name }} to the repository
+                                    </td>
+                                    <td id="middle-time">{{ notification.created_at }}</td>
+
+                                {% elif notification.valueProgress == 1 %}
+                                    <td>{{ forloop.counter }}.</td>
+                                    <td>{{ notification.changerID.team_member_name }}
+                                        removed {{ notification.changeValue }} {{ notification.changedID.unit_name }}
+                                        {{ notification.changedID.product_name }} from the repository
+                                    </td>
+                                    <td id="middle-time">{{ notification.created_at }}</td>
+                                {% elif notification.valueProgress == 2 %}
+                                    <td>{{ forloop.counter }}.</td>
+                                    <td>{{ notification.changerID.team_member_name }}
+                                        updated {{ notification.changedID.product_name }} without changing the quantity.
+                                    </td>
+                                    <td id="middle-time">{{ notification.created_at }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </section>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById("history").classList.add('active');
+</script>

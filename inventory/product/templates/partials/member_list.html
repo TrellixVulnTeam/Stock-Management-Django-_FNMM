@@ -1,0 +1,113 @@
+<style>
+    #example1_wrapper_filter {
+        float: right;
+    }
+
+    #row-aligned {
+        vertical-align: middle;
+    }
+</style>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box -->
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">{{ team_name }}</h3>
+                        </div>
+
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1_wrapper" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th class="table-row">Position</th>
+                                    <th class="table-row">Edit</th>
+                                    <th class="table-row">Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if members %}
+                                    {% for member in members %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ member.team_member_username }}</td>
+                                            <td>{{ member.team_member_name }}</td>
+                                            <td id="row-aligned" class="table-row"><span
+                                                    class="label label-primary">{{ member.team_member_position }}</span>
+                                            </td>
+                                            <td id="row-aligned" class="table-row">
+                                                <button type="button" name="edit_button" value="{{ member.id }}"
+                                                        class="btn bg-green margin">Edit
+                                                </button>
+                                            </td>
+                                            <td id="row-aligned" class="table-row">
+                                                <button type="button"
+                                                        value="{{ member.team_member_name }}--{{ member.id }}"
+                                                        name="delete_button" class="btn bg-red margin">Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    {% comment %}  <p>No Member</p>{% endcomment %}
+                                {% endif %}
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    {% comment %}    <a href="{% url 'logout' %}">Log out</a>{% endcomment %}
+    <!-- ./wrapper -->
+</div>
+<!-- page script -->
+
+
+<script>
+    $(function () {
+        $("#example2").DataTable();
+        $('#example1_wrapper').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true
+        });
+    });
+</script>
+{% if messages %}
+    <script>
+        alert("Changes have been made");
+    </script>
+{% endif %}
+<script>
+    $(document).on('click', 'button[name="delete_button"]:button', function () {
+        var al = $(this).val();
+        var partsArray = al.split('--');
+        $('#delete_modal_member').modal('show');
+        document.getElementById('member_print').innerHTML = partsArray[0];
+        document.getElementById('member_value').innerHTML = partsArray[1];
+    });
+
+    $(document).on('click', 'button[name="edit_button"]:button', function () {
+        var al = $(this).val();
+        location.href = ("/edit_member/".concat(al));
+    });
+    document.getElementById("team_list").classList.add('active');
+</script>

@@ -1,0 +1,60 @@
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6 col-md-offset-3">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Add Supplier</h3>
+                        </div>
+                        {% if messages %}
+                            <script>
+                                alert("New Supplier Added");
+                            </script>
+                        {% endif %}
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form role="form" action="{% url 'add_supplier' %}" method="post">
+                            {% csrf_token %}
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="supplier_name">Name</label>
+                                    <input type="text" name="supplier_name" class="form-control"
+                                           id="supplier_name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Team</label>
+                                    <select class="form-control" name="team">
+                                        {% for team in teams %}
+                                            <option value="{{ team.id }}">{{ team.team_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+                                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+
+    </div>
+</div>
+
+<script>
+    document.getElementById("add_supplier").classList.add('active');
+</script>

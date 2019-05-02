@@ -1,0 +1,191 @@
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6 col-md-offset-3">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Add your product</h3>
+                        </div>
+                        {% if messages %}
+                            <script>
+                                alert("New Product Added");
+                            </script>
+                        {% endif %}
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form role="form" action="{% url 'products' %}" method="post">
+                            {% csrf_token %}
+                            <div class="box-body">
+
+                                <label for="exampleInputEmail1">Product</label>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" name="product_name" class="form-control"
+                                               id="exampleInputEmail1" placeholder="Yarn Code"
+                                               required>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="dnr" class="form-control"
+                                               id="dnr" placeholder="DNR"
+                                               required>
+                                    </div>
+                                </div>
+                                <label for="cone_quantity_value">Number Of Cones</label>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" name="cone_quantity_value"
+                                               id="cone_quantity_value"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <label for="quantity">Quantity</label>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="number" step="0.01" class="form-control" name="quantity_value"
+                                               id="quantity"
+                                               required>
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" name="unit_name">
+                                            {% for unit in units %}
+                                                <option value="{{ unit.unit_si_name }}">{{ unit.unit_si_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <label for="ppp">Per Unit Price</label>
+                                <div class="form-inline">
+                                    <div class="form-group">
+
+                                        <input type="number" step="0.01" class="form-control" name="per_unit_price"
+                                               id="ppp"
+                                               required>
+                                    </div>
+                                    <span>
+                                        Tk
+                                    </span>
+                                </div>
+                                <label for="cheque_no">Challan No</label>
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <input type="text" name="cheque_no" class="form-control"
+                                               id="cheque_no"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Team Name</label>
+                                    <select class="form-control" name="team_name" id="product">
+                                        {% for team in teams %}
+                                            <option value="{{ team.team_name }}">{{ team.team_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Suppliers</label>
+                                    <select class="form-control" name="supplier_name" id="supply" required>
+                                        {% for team_one_supplier in team_one_suppliers %}
+                                            <option id="supply_option"
+                                                    value="{{ team_one_supplier.supplier_name }}">{{ team_one_supplier.supplier_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+                                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+                <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+
+    </div>
+
+
+</div>
+<script>
+    document.getElementById("add_product").classList.add('active');
+    //supplier selection after team selection
+    $("select#product").change(function () {
+        var conceptName = $('#product').find(":selected").text();
+        var $el = $("#supply");
+        var ts_four = [];
+        var ts_one = [];
+        var ts_two = [];
+        var ts_three = [];
+        var ts_five = [];
+        {% for team_four_supplier in team_four_suppliers %}
+            ts_four.push('{{ team_four_supplier.supplier_name }}');
+        {% endfor %}
+        {% for team_one_supplier in team_one_suppliers %}
+            ts_one.push('{{ team_one_supplier.supplier_name }}');
+        {% endfor %}
+        {% for team_two_supplier in team_two_suppliers %}
+            ts_two.push('{{ team_two_supplier.supplier_name }}');
+        {% endfor %}
+        {% for team_three_supplier in team_three_suppliers %}
+            ts_three.push('{{ team_three_supplier.supplier_name }}');
+        {% endfor %}
+        {% for team_five_supplier in team_five_suppliers %}
+            ts_five.push('{{ team_five_supplier.supplier_name }}');
+        {% endfor %}
+
+
+        $el.empty();
+        if (conceptName == 'Atrai Labels & Accessories') {
+            $.each(ts_one, function (key, value) {
+                $el.append($("<option></option>").attr("id", "supply_option")
+                    .attr("value", value).text(ts_one[key]));
+            });
+        } else if (conceptName == 'Atrai Polyflax Ltd.') {
+            $.each(ts_two, function (key, value) {
+                $el.append($("<option></option>").attr("id", "supply_option")
+                    .attr("value", value).text(ts_two[key]));
+            });
+
+        } else if (conceptName == 'Atrai Label printing & PKG.') {
+            $.each(ts_three, function (key, value) {
+                $el.append($("<option></option>").attr("id", "supply_option")
+                    .attr("value", value).text(ts_three[key]));
+            });
+        } else if (conceptName == 'Cynosure BD') {
+            $.each(ts_four, function (key, value) {
+                $el.append($("<option></option>").attr("id", "supply_option")
+                    .attr("value", value).text(ts_four[key]));
+            });
+        } else {
+            $.each(ts_five, function (key, value) {
+                $el.append($("<option></option>").attr("id", "supply_option")
+                    .attr("value", value).text(ts_five[key]));
+            });
+        }
+    });
+
+    {% comment %}  $(document).ready(function () {
+          $("form").on('submit', function (e) {
+              var conceptName = $('#supply').find(":selected").text();
+              $("#supply").val("das");
+          });
+      });{% endcomment %}
+
+
+</script>
+
+
+

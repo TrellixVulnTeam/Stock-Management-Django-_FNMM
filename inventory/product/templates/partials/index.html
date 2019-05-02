@@ -1,0 +1,47 @@
+{% include 'partials/header.html' %}
+{% load static %}
+<body class="hold-transition login-page">
+<div class="login-box">
+    <a href="{% url 'index' %}">
+        <div class="login-logo">
+            <img style="max-width: 40%" src="{% static 'images/atrai-logo.png' %}" alt="logo">
+            <h2>Atrai Group</h2>
+        </div>
+    </a>
+
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        {% if messages %}
+            {% comment %}  <script>
+                alert("Please enter your credentials correctly and try again");
+            </script>{% endcomment %}
+            <p class="login-box-msg error-text">Please enter your credentials correctly and try again</p>
+        {% else %}
+            <p class="login-box-msg">Inventory System Login</p>
+        {% endif %}
+        <form action="{% url 'index' %}" method="post">
+           {% csrf_token %}
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" name="team_member_username" placeholder="Username" required>
+                <span class="fa fa-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" name="team_member_password" placeholder="Password" required>
+                <span class="fa fa-key form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+{% include 'partials/footer.html' %}

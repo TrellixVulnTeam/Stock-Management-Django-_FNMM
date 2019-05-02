@@ -1,0 +1,156 @@
+<style>
+    #example1_wrapper_filter {
+        float: right;
+    }
+</style>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box -->
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">List of products with description</h3>
+                        </div>
+
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1_wrapper" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Yarn Code</th>
+                                    <th>DNR</th>
+                                    <th>Cones(Rem)</th>
+                                    <th>Quantity(Rem)</th>
+                                    <th>Quantity(Used)</th>
+                                    <th>Price/Unit</th>
+                                    <th>Total Price</th>
+                                    <th>Team Name</th>
+                                    {% if request.session.team == 'Admin' %}
+                                        <th class="table-row">Edit</th>
+                                        <th class="table-row">Purchase</th>
+                                        <th class="table-row">Use</th>
+                                        <th class="table-row">Delete</th>
+                                    {% else %}
+                                        <th class="table-row">Use</th>
+                                    {% endif %}
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.product_name }}</td>
+                                        <td>{{ product.product_code }}</td>
+                                        <td>{{ product.cone_quantity_value }}</td>
+                                        <td>{{ product.quantity_value }} {{ product.unit_name }}</td>
+                                        <td>{{ product.quantity_used_value }} {{ product.unit_name }}</td>
+                                        <td>{{ product.per_unit_price }}</td>
+                                        <td>{{ product.total_unit_price }}</td>
+                                        <td>{{ product.team_name }}</td>
+                                        {% if request.session.team == 'Admin' %}
+                                            <td class="table-row">
+                                                <button type="button" value="{{ product.id }}" name="edit_button"
+                                                        class="btn bg-green margin">Edit
+                                                </button>
+                                            </td>
+                                            <td class="table-row">
+                                                <button type="button" value="{{ product.id }}" name="purchase_button"
+                                                        class="btn bg-green margin">Purchase
+                                                </button>
+                                            </td>
+                                            <td class="table-row">
+                                                <button type="button"
+                                                        value="{{ product.product_name }}--{{ product.id }}--{{ product.quantity_value }}--{{ product.unit_name }}--{{ product.cone_quantity_value }}"
+                                                        name="update_button" class="btn bg-green margin">Use
+                                                </button>
+                                            </td>
+                                            <td class="table-row">
+                                                <button type="button"
+                                                        value="{{ product.product_name }}--{{ product.id }}"
+                                                        name="delete_button" class="btn bg-red margin">Delete
+                                                </button>
+                                            </td>
+                                        {% else %}
+                                            <td class="table-row">
+                                                <button type="button"
+                                                        value="{{ product.product_name }}--{{ product.id }}--{{ product.quantity_value }}--{{ product.unit_name }}--{{ product.cone_quantity_value }}"
+                                                        name="update_button" class="btn bg-green margin">Use
+                                                </button>
+                                            </td>
+                                        {% endif %}
+
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    {% comment %}    <a href="{% url 'logout' %}">Log out</a>{% endcomment %}
+    <!-- ./wrapper -->
+</div>
+<!-- page script -->
+<script>
+    $(function () {
+        $("#example2").DataTable();
+        $('#example1_wrapper').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true
+        });
+    });
+</script>
+{% if messages %}
+    <script>
+        alert("Changes have been made");
+    </script>
+
+{% endif %}
+<script>
+    $(document).on('click', 'button[name="delete_button"]:button', function () {
+        var al = $(this).val();
+        var partsArray = al.split('--');
+        $('#delete_modal').modal('show');
+        document.getElementById('delete_value_print').innerHTML = partsArray[0];
+        document.getElementById('delete_value').innerHTML = partsArray[1];
+    });
+
+    $(document).on('click', 'button[name="update_button"]:button', function () {
+        var al = $(this).val();
+        var partsArray = al.split('--');
+        document.getElementById('item_name').innerHTML = partsArray[0];
+        document.getElementById('product_id').value = partsArray[1];
+        document.getElementById('change_quantity').innerHTML = partsArray[2];
+        document.getElementById('item_unit').innerHTML = partsArray[3];
+        document.getElementById('cone_change_quantity').innerHTML = partsArray[4];
+        $('#update_modal_product').modal('show');
+
+    });
+
+    $(document).on('click', 'button[name="edit_button"]:button', function () {
+        var al = $(this).val();
+        location.href = ("/edit_product/".concat(al));
+    });
+
+     $(document).on('click', 'button[name="purchase_button"]:button', function () {
+        var al = $(this).val();
+        location.href = ("/purchase_product/".concat(al));
+    });
+
+    document.getElementById("product_list").classList.add('active');
+
+</script>

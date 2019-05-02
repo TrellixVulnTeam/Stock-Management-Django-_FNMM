@@ -1,0 +1,125 @@
+<style>
+    #example1_wrapper_filter {
+        float: right;
+    }
+
+    #row-aligned {
+        vertical-align: middle;
+    }
+</style>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- /.box -->
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Products Issued From {{ supplier.supplier_name }}</h3>
+                        </div>
+
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="example1_wrapper" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Challan No.</th>
+                                    <th>Yarn Code</th>
+                                    <th>DNR</th>
+                                    <th>Due Amount</th>
+                                    <th>Paid To Date</th>
+                                    <th>Issued Date</th>
+                                    <th class="table-row">Pay</th>
+                                    <th class="table-row">Pay Full</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if productEntryInfos %}
+                                    {% for productEntryInfo in productEntryInfos %}
+                                        <tr>
+                                            <td>{{ productEntryInfo.chequeNo }}</td>
+                                            <td>{{ productEntryInfo.productID.product_name }}</td>
+                                            <td>{{ productEntryInfo.productID.product_code }}</td>
+                                            <td>{{ productEntryInfo.due_amount }}</td>
+                                            <td>{{ productEntryInfo.paid_amount }}</td>
+                                            <td>{{ productEntryInfo.created_at }}</td>
+
+                                            <td id="row-aligned" class="table-row">
+                                                <button type="button"
+                                                        value="{{ productEntryInfo.id }}--{{ productEntryInfo.due_amount }}"
+                                                        name="pay_button" class="btn bg-green margin">Pay
+                                                </button>
+                                            </td>
+                                            <td id="row-aligned" class="table-row">
+                                                <button type="button"
+                                                        value="{{ productEntryInfo.due_amount }}--{{ productEntryInfo.id }}"
+                                                        name="pay_full_button" class="btn bg-green margin">Pay Full
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    {% comment %}  <p>No Member</p>{% endcomment %}
+                                {% endif %}
+
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    {% comment %}    <a href="{% url 'logout' %}">Log out</a>{% endcomment %}
+    <!-- ./wrapper -->
+</div>
+<!-- page script -->
+
+
+<script>
+    $(function () {
+        $("#example2").DataTable();
+        $('#example1_wrapper').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true
+        });
+    });
+</script>
+{% if messages %}
+    <script>
+        alert("Changes have been made");
+    </script>
+{% endif %}
+<script>
+    $(document).on('click', 'button[name="pay_full_button"]:button', function () {
+        var al = $(this).val();
+        var partsArray = al.split('--');
+        $('#pay_full_modal_supplier').modal('show');
+        document.getElementById('due_amount').innerHTML = partsArray[0];
+        document.getElementById('info_id').innerHTML = partsArray[1];
+    });
+
+
+    $(document).on('click', 'button[name="pay_button"]:button', function () {
+        var al = $(this).val();
+        var partsArray = al.split('--');
+        document.getElementById('pay_info_id').value = partsArray[0];
+        document.getElementById('due_amount').innerHTML = partsArray[1];
+        //alert(partsArray[1]);
+        $('#pay_modal_supplier').modal('show');
+
+    });
+
+
+    document.getElementById("supplier_team_list").classList.add('active');
+</script>

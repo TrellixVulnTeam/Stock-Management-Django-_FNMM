@@ -1,0 +1,50 @@
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Teams</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <table class="table table-striped">
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Team Name</th>
+                            <th style="width: 40px">Members</th>
+                        </tr>
+                        {% for team in teams %}
+                            <tr class="clickable-row" onclick="window.location='/member_list/{{ team.id }}';"
+                                style="cursor:pointer;">
+                                <td>{{ forloop.counter }}.</td>
+                                <td>{{ team.team_name }}</td>
+                                {% if  team.id == 1 %}
+                                    <td class="table-row"><span class="badge bg-red">{{ one_team_count }}</span></td>
+                                {% elif  team.id == 2 %}
+                                    <td class="table-row"><span class="badge bg-red">{{ two_team_count }}</span></td>
+                                {% elif  team.id == 3 %}
+                                    <td class="table-row"><span class="badge bg-red">{{ three_team_count }}</span></td>
+                                {% elif  team.id == 4 %}
+                                    <td class="table-row"><span class="badge bg-red">{{ four_team_count }}</span></td>
+                                {% elif  team.id == 6 %}
+                                    <td class="table-row"><span class="badge bg-red">{{ six_team_count }}</span></td>
+                                {% endif %}
+
+                            </tr>
+                        {% endfor %}
+
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </section>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById("team_list").classList.add('active');
+</script>
